@@ -8,6 +8,9 @@ const nodes = document.querySelectorAll('.node-name');
 const files = document.querySelectorAll('.files');
 let clickedElement = null;
 let sivrPageId=null;
+let sivrPage = null;
+let pageElements=null;
+let nodeElementModalTableContent = '';
 
 
 
@@ -18,6 +21,8 @@ Array.from(nodes).forEach(function (element) {
         function (e) {
             clickedElement = element;
             sivrPageId=clickedElement.dataset.sivrpageId;
+            sivrPage = findPageById(sivrPageId);
+            console.log(sivrPage);
             e.preventDefault();
             menu.style.display = "block";
             menu.style.left = e.pageX;
@@ -52,6 +57,95 @@ Array.from(nodes).forEach(function (element) {
                     menu.style.display = "none";
                 });
             }
+
+
+            pageElements=sivrPage.page_elements;
+            console.log(pageElements);
+
+            pageElements.forEach((pageElement) => {
+                nodeElementModalTableContent += `
+                <table class="table table-bordered table-striped table-sm border-secondary">
+                    <tbody>
+                        <tr>
+                            <td>${pageElement.type}</td>
+                            <td>${pageElement.value}</td>
+                        </tr>
+                    </tbody>
+                </table>
+        `;
+            });
+            /**
+             *************
+             * *********** PAGE ELEMENTS**********************
+             * ***********
+             * */
+
+                // Node elements variables//
+            const nodeElementModal=document.getElementById('node-element-modal');
+            nodeElementModal.innerHTML=`  <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">SIVR PAGE ELEMENTS</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+
+                        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="element-tab" data-bs-toggle="tab"
+                                        data-bs-target="#element-tab-pane" type="button" role="tab"
+                                        aria-controls="element-tab-pane" aria-selected="true"><i class="ph-fill ph-stack"></i>
+                                    Element Info
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane"
+                                        type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="true"><i
+                                        class="ph-fill ph-pencil-simple-line"></i> Edit
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#upload-tab-pane"
+                                        type="button" role="tab" aria-controls="upload-tab-pane" aria-selected="false"><i
+                                        class="ph-fill ph-upload"></i> Upload Menu Icon
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="disabled-tab" data-bs-toggle="tab"
+                                        data-bs-target="#delete-tab-pane" type="button" role="tab"
+                                        aria-controls="delete-tab-pane" aria-selected="false"><i
+                                        class="ph-fill ph-trash-simple"></i> Delete
+                                </button>
+                            </li>
+                        </ul>
+
+
+                        <div class="tab-content" id="nodeTabContent">
+
+                            <div class="tab-pane fade show active" id="element-tab-pane" role="tabpanel"
+                                 aria-labelledby="element-tab" tabindex="0">
+                                   <div class="table-responsive">
+                              ${nodeElementModalTableContent}
+                              </div>
+                            </div>
+                            <div class="tab-pane fade" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab"
+                                 tabindex="0">EDIT
+                            </div>
+                            <div class="tab-pane fade" id="upload-tab-pane" role="tabpanel" aria-labelledby="upload-tab"
+                                 tabindex="0">Upload
+                            </div>
+                            <div class="tab-pane fade" id="delete-tab-pane" role="tabpanel" aria-labelledby="delete-tab"
+                                 tabindex="0">Edit
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+        </div>`;
         });
 
     document.addEventListener("click", function () {
@@ -110,10 +204,8 @@ const editPageHeadingEnglish = document.getElementById('edit_page_heading_en');
 //Event listener for edit option
 editOption.addEventListener('click', function () {
 
-    console.log(sivrPageId)
-    console.log(sivrPagesJson);
-    const sivrPage = findPageById(sivrPageId);
-    console.log(sivrPage.page_elements);
+
+
     editPageVivrIdInput.value = sivrPage.vivr_id;
     editPageHeadingBangla.value = sivrPage.page_heading_ban;
     editPageHeadingEnglish.value = sivrPage.page_heading_en;
@@ -181,109 +273,6 @@ cancelButton.addEventListener('click', () => {
 
 deleteConfirmButton.addEventListener('click', () => {
     deletePageForm.submit();
-});
-
-/**
- *************
- * *********** NODE ELEMENTS  FUNCTIONALITIES **********************
- * ***********
- * */
-
-// Node elements variables//
-const nodeElementOption=document.getElementById('node-element-option');
-const nodeElementModal=document.getElementById('node-element-modal');
-
-nodeElementOption.addEventListener('click',event=>{
-    console.log(sivrPageId)
-    console.log(sivrPagesJson);
-    const sivrPage = findPageById(sivrPageId);
-    console.log(sivrPage.page_elements);
-    let pageElements=sivrPage.page_elements;
-
-    pageElements.forEach(element=>{
-
-    })
-
-nodeElementModal.innerHTML=`
-
-<div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title">SIVR PAGE ELEMENTS</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <div class="modal-body">
-
-
-                        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="element-tab" data-bs-toggle="tab"
-                                        data-bs-target="#element-tab-pane" type="button" role="tab"
-                                        aria-controls="element-tab-pane" aria-selected="true"><i class="ph-fill ph-stack"></i>
-                                    Element Info
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane"
-                                        type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="true"><i
-                                        class="ph-fill ph-pencil-simple-line"></i> Edit
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#upload-tab-pane"
-                                        type="button" role="tab" aria-controls="upload-tab-pane" aria-selected="false"><i
-                                        class="ph-fill ph-upload"></i> Upload Menu Icon
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="disabled-tab" data-bs-toggle="tab"
-                                        data-bs-target="#delete-tab-pane" type="button" role="tab"
-                                        aria-controls="delete-tab-pane" aria-selected="false"><i
-                                        class="ph-fill ph-trash-simple"></i> Delete
-                                </button>
-                            </li>
-                        </ul>
-
-
-                        <div class="tab-content" id="nodeTabContent">
-
-                            <div class="tab-pane fade show active" id="element-tab-pane" role="tabpanel"
-                                 aria-labelledby="element-tab" tabindex="0">
-
-                                <div class="table-responsive">
-
-                                    <table class="table table-bordered table-striped table-sm border-secondary">
-
-                                        <tbody>
-                                        <tr>
-                                            <td>paragraph</td>
-                                            <td>1</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                            </div>
-                            <div class="tab-pane fade" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab"
-                                 tabindex="0">EDIT
-                            </div>
-                            <div class="tab-pane fade" id="upload-tab-pane" role="tabpanel" aria-labelledby="upload-tab"
-                                 tabindex="0">Upload
-                            </div>
-                            <div class="tab-pane fade" id="delete-tab-pane" role="tabpanel" aria-labelledby="delete-tab"
-                                 tabindex="0">Edit
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-`
-
-
 });
 
 function findPageById(sivrPageId) {

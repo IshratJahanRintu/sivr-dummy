@@ -326,7 +326,6 @@
          ***********************************-->
         <div id="node-element-modal" class="modal fade" tabindex="-1" aria-lebeledby="node-element">
 
-        </div>
     </div>
 
 @endsection
