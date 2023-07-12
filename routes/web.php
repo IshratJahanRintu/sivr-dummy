@@ -9,7 +9,6 @@ use App\Http\Controllers\AgentController;
 use App\Http\Controllers\SocialPlatformController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
-
 use App\Http\Controllers\WebHookController;
 
 /*

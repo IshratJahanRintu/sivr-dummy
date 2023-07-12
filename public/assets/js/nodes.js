@@ -131,7 +131,7 @@ Array.from(nodes).forEach(function (element) {
                             <td>${pageElement.columns}</td>
                             </tr>
                             <td>Element Visiblity :</td>
-                            <td>${pageElement.is_visible}</td>
+                            <td>${(pageElement.is_visible==='Y')?'Visible':'Not Visible'}</td>
                             </tr>
                             <td>Data Provider Funtion :</td>
                             <td>${pageElement.data_provider_function}</td>
@@ -153,7 +153,7 @@ Array.from(nodes).forEach(function (element) {
                                  tabindex="0">Edit
                             </div>
                         </div>
-               
+
         `;
             });
             /**
@@ -169,7 +169,7 @@ Array.from(nodes).forEach(function (element) {
 
                     <div class="modal-header">
                         <h5 class="modal-title">SIVR PAGE ELEMENTS</h5>
-                        
+
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
