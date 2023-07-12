@@ -1,2 +1,18 @@
 .custom-css{display:none}
 /*# sourceMappingURL=custom.css.map */
+
+.page-elements{
+    table-layout: fixed;
+    width: 100%;
+}
+
+.page-elements td{
+    width: 50%;
+}
+
+
+.add-new-page-element-btn {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
