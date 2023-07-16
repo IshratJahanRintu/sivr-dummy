@@ -55,6 +55,8 @@ Array.from(nodes).forEach(function (element) {
                 });
             }
 
+addpageElementPageIdInput=document.getElementById('page_element_add_page_id');
+            addpageElementPageIdInput.value=sivrPageId;
 
             pageElements = sivrPage.page_elements;
             console.log(pageElements);
@@ -174,13 +176,12 @@ Array.from(nodes).forEach(function (element) {
                     </div>
 
                     <div class="modal-body ">
-                           <div class="row">
-                <div class="col text-end">
-                    <div class="add-new-page-element-btn">
-                        <a href="" class="btn btn-outline-primary btn-sm fw-bold"><i class="bi bi-plus-lg"></i> Add New Page Element</a>
-                    </div>
+               <div class="text-end mb-3">
+                    <button class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1"
+                            data-bs-toggle="modal" data-bs-target="#addNewPageElement"><i class="bi bi-plus"></i> Add
+                        New Page Element
+                    </button>
                 </div>
-            </div>
 
                       ${nodeElementModalTableContent}
 
@@ -316,6 +317,48 @@ deleteConfirmButton.addEventListener('click', () => {
     deletePageForm.submit();
 });
 
+/**
+ *************
+ * *********** Audio upload  FUNCTIONALITIES **********************
+ * ***********
+ * */
+//audio-upload variables
+const audioUploadOption = document.getElementById('audio-upload-option');
+const audioPageIdInput = document.getElementById('audio-page-id');
+const audioList=document.getElementById('audioList');
+const audioSource=document.getElementById('audioSource');
+const audioPlayer = document.getElementById('audioPlayer');
+//Event listener for audio upload option
+function playAudio(url) {
+    let audioUrl = `{{Storage::url(${url})}}`;
+    // currentAudioIndex = index;
+    // highlightCurrentAudio();
+    // if (index >= 0 && index < audioFiles.length) {
+    //     let file = audioFiles[index];
+    audioSource.setAttribute('src', audioUrl);
+    audioPlayer.load();
+    audioPlayer.play();
+    // }
+}
+audioUploadOption.addEventListener('click', function () {
+
+    if (clickedElement != null) {
+
+        audioPageIdInput.value = sivrPageId;
+        console.log(audioPageIdInput.value);
+audioList.innerHTML=`
+<li onclick="playAudio('${sivrPage.audio_file_ban}')">Bangla Audio file:${sivrPage.audio_file_ban}</li>
+<li  onclick="playAudio('${sivrPage.audio_file_en}')">English Audio file:${sivrPage.audio_file_en}</li>
+`;
+
+
+    }
+
+
+});
+
+
+
 function findPageById(sivrPageId) {
     console.log(sivrPagesJson);
     return sivrPagesJson.find(sivrPage => sivrPage.id === parseInt(sivrPageId));
@@ -323,6 +366,7 @@ function findPageById(sivrPageId) {
 
 //
 // // ************************Audio file upload script************************//
+//
 //
 // let audioFiles = [];
 // let currentAudioIndex = -1;
@@ -338,17 +382,7 @@ function findPageById(sivrPageId) {
 //     }
 // }
 //
-// function playAudio(index) {
-//     currentAudioIndex = index;
-//     highlightCurrentAudio();
-//
-//     if (index >= 0 && index < audioFiles.length) {
-//         let file = audioFiles[index];
-//         document.getElementById('audioSource').src = file.url;
-//         document.getElementById('audioPlayer').load();
-//         document.getElementById('audioPlayer').play();
-//     }
-// }
+
 //
 // document.getElementById('audioForm').addEventListener('submit', function (e) {
 //     e.preventDefault();
@@ -378,7 +412,7 @@ function findPageById(sivrPageId) {
 //     }
 //
 //     fileInput.value = '';
-// });
+//
 //
 // document.getElementById('audioPlayer').addEventListener('ended', function () {
 //     if (currentAudioIndex < audioFiles.length - 1) {
@@ -431,9 +465,33 @@ function findPageById(sivrPageId) {
 //
 // document.getElementById('nextButton').addEventListener('click', playNext);
 // document.getElementById('previousButton').addEventListener('click', playPrevious);
+//
+//
+//
 
+/**
+ * @script For Element Type Dropdown Toggle
+ */
+;(function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        const elementType = document.getElementById('g-element-type')
+        const elementNames = document.getElementById('element-name-area');
+        const elementRowColumns = document.getElementById('no-row-column-area');
 
+        elementType.addEventListener('change', function () {
+            const elementTypeValue = elementType.value;
+            if (elementTypeValue === "input") {
+                elementNames.style.display = "block";
+                elementRowColumns.style.display = "none";
+            } else if (elementTypeValue === "table") {
+                elementNames.style.display = "none";
+                elementRowColumns.style.display = "block";
+            } else if (elementTypeValue === "button") {
+                elementNames.style.display = "none";
+                elementRowColumns.style.display = "none";
+            }
+        })
 
-
-
+    });
+})();
 

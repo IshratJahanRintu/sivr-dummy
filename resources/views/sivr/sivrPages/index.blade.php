@@ -27,7 +27,7 @@
                                             @else
                                                 @foreach ($sivrPages as $sivrPage)
                                                     <li class="{{$sivrPage->hasChildren()?'folder':'file'}} "><span
-                                                            data-sivrpage-id={{$sivrPage->id}} class="node-name">{{$sivrPage->page_heading_en}}</span>
+                                                                data-sivrpage-id={{$sivrPage->id}} class="node-name">{{$sivrPage->page_heading_en}}</span>
 
                                                         @include('sivr.sivrPages.children', ['children' => $sivrPage->children])
                                                     </li>
@@ -56,8 +56,8 @@
                                 <li id="add-option" class="" data-bs-target="#g-sivr-add-modal" data-bs-toggle="modal">
                                     <i class="ph-fill ph-plus"></i> Add Branch
                                 </li>
-                                <li class="" data-bs-target="#g-sivr-audio-upload-modal" data-bs-toggle="modal"><i
-                                        class="ph-fill ph-upload"></i> Upload
+                                <li id="audio-upload-option" class="" data-bs-target="#g-sivr-audio-upload-modal" data-bs-toggle="modal"><i
+                                            class="ph-fill ph-upload"></i> Upload
                                     File
                                 </li>
                                 <li class="" data-bs-toggle="modal" id="node-element-option"
@@ -285,28 +285,35 @@
                     <div class="modal-body">
                         <h6> Audio Upload Here</h6>
 
-                        <form class="d-inline-flex gap-2 mb-3 w-100" id="audioForm" enctype="multipart/form-data"
-                              multiple>
+                        <form class=" mb-3 w-100" id="audioForm" method="POST" action="{{ route('sivr-pages.save-audio') }}" enctype="multipart/form-data"
+                              multiple >
+                            @csrf
+                            <input type="hidden" id="audio-page-id" name="page_id" value="default">
+                            <label for="audioInput_en">Upload english audio file</label>
+                            <input class="form-control" type="file" accept="audio/*" name="audio_file_en" id="audioInput_en"/>
 
-                            <input class="form-control" type="file" accept="audio/*" id="audioInput"/>
+                            <label for="audioInput_ban">Upload bangla audio file</label>
+                            <input class="form-control" type="file" accept="audio/*" name="audio_file_ban" id="audioInput_ban"/>
 
-                            <button class="btn btn-success btn-sm" type="submit">Upload</button>
+                            <button class="btn btn-success btn-sm mb-3 mt-3" type="submit">Upload</button>
                         </form>
 
-                        <h6>Uploaded Audio List</h6>
-                        <ul id="audioList"></ul>
+                                    <h6>Uploaded Audio List</h6>
+                                    <ul id="audioList">
 
-                        <hr/>
-                        <div class="g-player">
-                            <audio class="w-100" id="audioPlayer" controls>
-                                <source id="audioSource" src="" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                            <div class="g-player-controls">
-                                <button class="btn btn-sm btn-secondary" id="previousButton"><i
-                                        class="ph-fill ph-skip-back"></i></button>
-                                <button class="btn btn-sm btn-secondary" id="nextButton"><i
-                                        class="ph-fill ph-skip-forward"></i>
+                                    </ul>
+
+                                    <hr/>
+                                    <div class="g-player">
+                                        <audio class="w-100" id="audioPlayer" controls>
+                                            <source id="audioSource" src="" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                        <div class="g-player-controls">
+                                            <button class="btn btn-sm btn-secondary" id="previousButton"><i
+                                                        class="ph-fill ph-skip-back"></i></button>
+                                            <button class="btn btn-sm btn-secondary" id="nextButton"><i
+                                                        class="ph-fill ph-skip-forward"></i>
                                 </button>
                             </div>
                         </div>
@@ -314,8 +321,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-sm btn-primary text-white">Save changes</button>
+
+
                     </div>
                 </div>
             </div>
@@ -326,7 +333,109 @@
          ***********************************-->
         <div id="node-element-modal" class="modal fade" tabindex="-1" aria-lebeledby="node-element">
 
-    </div>
+        </div>
 
+        <!--**********************************
+      Add New Page Element Modal
+ ***********************************-->
+        <div class="modal fade" id="addNewPageElement" aria-hidden="true" aria-labelledby="addNewPageElement" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Add New Page Element</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="add-new-page-element">
+                            <form method="POST" action="{{route("sivr-page-elements.store")}}">
+@csrf
+                                <input type="hidden" name="page_id" id="page_element_add_page_id">
+                                <div class="form-group mb-2">
+                                    <label for="g-element-type">Element Type</label>
+                                    <select name="type" id="g-element-type" class="form-control">
+                                        <option value="button" selected>Button</option>
+                                        <option value="input">Input</option>
+                                        <option value="table">Table</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label for="g-element-order">Element Order</label>
+                                    <input class="form-control" type="number" name="element_order" id="g-element-order">
+                                </div>
+
+                                <div class="form-group mb-2">
+                                    <label for="g-element-text-en">Text (EN)</label>
+                                    <input class="form-control" type="text" name="display_name_en" id="g-element-text-en">
+                                </div>
+
+                                <div class="form-group mb-2">
+                                    <label for="g-element-text-bn">Text (BN)</label>
+                                    <input class="form-control" type="text" name="display_name_bn" id="g-element-text-bn">
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div class="form-group mb-2">
+                                        <label for="g-element-color">Text Color</label>
+                                        <input class="form-control" type="color" name="text_color" id="g-element-color">
+                                    </div>
+
+                                    <div class="form-group mb-2">
+                                        <label for="g-element-bg-color">Background Color</label>
+                                        <input class="form-control" type="color" name="background_color" id="g-element-bg-color">
+                                    </div>
+                                </div>
+
+                                <div id="element-name-area">
+
+                                    <div class="form-group mb-2">
+                                        <label for="g-element-text-name">Element Name</label>
+                                        <input class="form-control" type="text" name="name" id="g-element-text-name">
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for="g-element-value">Element Value</label>
+                                        <input class="form-control" type="text" name="value" id="g-element-value">
+                                    </div>
+                                </div>
+
+                                <div id="no-row-column-area">
+
+                                    <div class="form-group mb-2">
+                                        <label for="g-element-no-rows">No Of Rows</label>
+                                        <input class="form-control" type="number" name="rows" id="g-element-no-rows">
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for="g-element-no-columns">No Of Columns</label>
+                                        <input class="form-control" type="number" name="" id="g-element-no-columns">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group mb-2">
+                                    <label for="g-element-visibility">Element Visibility</label>
+                                    <select name="is_visible" id="g-element-visibility" class="form-control">
+                                        <option value="Y">Visible</option>
+                                        <option value="N">Invisible</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group mb-2">
+                                    <label for="g-element-provider-function">Data Provider Function</label>
+                                    <input class="form-control" type="text" name="data_provider_function" id="g-element-provider-function">
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success">Save</button>
+                        <button class="btn btn-primary" data-bs-target="#g-modal-node-element" data-bs-toggle="modal">Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 

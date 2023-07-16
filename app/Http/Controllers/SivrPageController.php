@@ -58,6 +58,38 @@ class SivrPageController extends Controller
         return redirect(route('sivr-pages.index'));
     }
 
+    public function saveAudio(Request $request)
+    {
+        $pageId=$request->page_id;
+        $sivrPage=SivrPage::find($pageId);
+        $audio_file_ban = $request->file('audio_file_ban');
+        $audio_file_en = $request->file('audio_file_en');
+
+        // Validate and store the audio files
+        if ($audio_file_ban && $audio_file_en) {
+            $path_ban = $audio_file_ban->storeAs('audio_files', $audio_file_ban->getClientOriginalName());
+            $path_en = $audio_file_en->storeAs('audio_files', $audio_file_en->getClientOriginalName());
+
+
+
+            // Save the file paths to the database
+          $updated=  $sivrPage->update([
+                'audio_file_ban' => $path_ban,
+                'audio_file_en' => $path_en,
+            ]);
+if ($updated){
+    return redirect()->back();
+}
+else{
+    echo "audio file upload failed";
+}
+
+        }
+
+        return redirect()->back()->withErrors('Please upload both audio files.');
+    }
+
+
     /**
      * Display the specified resource.
      *

@@ -36,6 +36,7 @@ Route::resource('social-platform', SocialPlatformController::class);
 Route::resource('webhook-log', WebHookController::class);
 Route::resource('sivr-pages', SivrPageController::class);
 Route::resource('sivr-page-elements', SivrPageElementController::class);
+Route::post('/sivr-pages/save-audio', [SivrPageController::class, 'saveAudio'])->name('sivr-pages.save-audio');
 Route::get('fb-page-webhook', [WebHookController::class, 'webHook']);
 Route::post('fb-page-webhook', [WebHookController::class, 'fbPageWebHookData']);
 Route::post('instagram-webhook', [WebHookController::class, 'instagramWebHookData']);
