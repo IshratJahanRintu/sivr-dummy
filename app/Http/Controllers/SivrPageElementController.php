@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SivrPageElement;
+use App\Services\SivrPageElementService;
 use Illuminate\Http\Request;
 
 class SivrPageElementController extends Controller
@@ -12,6 +13,13 @@ class SivrPageElementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $sivrPageElementService;
+
+    function __construct()
+    {
+        $this->sivrPageElementService = new SivrPageElementService();
+    }
+
     public function index()
     {
         //
@@ -31,23 +39,7 @@ class SivrPageElementController extends Controller
     public function store(Request $request)
     {
 
-        SivrPageElement::query()->create([
-
-            'page_id' => $request->page_id,
-            'type ' => $request->type,
-            'display_name_bn' => $request->display_name_bn,
-            'display_name_en' => $request->display_name_en,
-            'background_color' => $request->background_color,
-            'text_color' => $request->text_color,
-            'name' => $request->name,
-            'value' => $request->value,
-            'element_order' => $request->element_order,
-            'rows' => $request->rows,
-            'is_visible' => $request->is_visible,
-            'data_provider_function' => $request->data_provider_function,
-
-
-        ]);
+        $this->sivrPageElementService->createItem($request);
         return redirect(route('sivr-pages.index'));
     }
 
@@ -82,22 +74,7 @@ class SivrPageElementController extends Controller
     public function update(Request $request, SivrPageElement $sivrPageElement)
     {
 
-        $updated = $sivrPageElement->update([
-
-            'type ' => $request->type,
-            'display_name_bn' => $request->display_name_bn,
-            'display_name_en' => $request->display_name_en,
-            'background_color' => $request->background_color,
-            'text_color' => $request->text_color,
-            'name' => $request->name,
-            'value' => $request->value,
-            'element_order' => $request->element_order,
-            'rows' => $request->rows,
-            'is_visible' => $request->is_visible,
-            'data_provider_function' => $request->data_provider_function,
-
-
-        ]);
+        $updated =$this->sivrPageElementService->updateItem($request,$sivrPageElement);
         if ($updated) {
             return back();
         }
@@ -110,7 +87,7 @@ class SivrPageElementController extends Controller
      */
     public function destroy(SivrPageElement $sivrPageElement)
     {
-        $sivrPageElement->forceDelete();
+       $this->sivrPageElementService->deleteItem($sivrPageElement);
         return redirect(route('sivr-pages.index'));
     }
 }
